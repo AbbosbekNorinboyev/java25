@@ -1,0 +1,101 @@
+server:
+  port: 1236
+
+spring:
+  application:
+    name: java25
+
+  # Postgres config
+  datasource:
+    url: jdbc:postgresql://localhost:5432/project?currentSchema=java25
+    username: postgres
+    password: 2210
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # Redis config
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 2
+      connect-timeout: 6000ms
+      timeout: 3000ms
+      repositories:
+        enabled: true
+  cache:
+    type: redis
+
+# SpringDoc config
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    tags-sorter: alpha                # Tag’larni alifbo tartibida ko‘rsatadi
+    doc-expansion: none               # Swagger’da barcha bo‘limlar yopiq holda chiqadi (collapsed)
+    try-it-out-enabled: true          # "Try it out" tugmasini o‘chiradi (foydalanuvchi swagger orqali API chaqira olmaydi)
+    default-model-expand-depth: 10    # Model (schema) larni nechta chuqurlikda expand qilishini belgilaydi
+    operations-sorter: method         # metodlarni tartib bilan ko‘rsatadi (GET, POST, PUT...)
+    display-request-duration: true    # har bir request qancha vaqt olganini ko‘rsatadi
+
+management:
+  endpoint:
+    health:
+      show-details: always   # health check natijasida barcha detallarni ko‘rsatish
+    caches:
+      access: none
+    metrics:
+      access: read_only
+    heapdump:
+      access: none
+    loggers:
+      access: none
+    threaddump:
+      access: none
+    beans:
+      access: none
+    env:
+      access: none
+    prometheus:
+      enabled: true
+    info:
+      enabled: true
+    configprops:
+      access: none
+  endpoints:
+    web:
+      exposure:
+        # qaysi endpointlar tashqariga ochiladi
+        include:
+          - health
+          - caches
+          - metrics
+          - heapdump
+          - loggers
+          - threaddump
+          - beans
+          - env
+          - prometheus
+          - info
+          - configprops
+        exclude: shutdown   # shutdown xavfli, odatda yopiladi
+  metrics:
+    tags:
+      application: ${spring.application.name}   # Prometheus/Grafana uchun app tag qo‘shish
+
+  health:
+    db:
+      enabled: true          # DB health check yoqilgan
+    diskspace:
+      enabled: true          # Disk bo‘sh joyini tekshiradi
+    ping:
+      enabled: true          # Ping check
+    redis:
+      enabled: true
