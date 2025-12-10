@@ -29,8 +29,6 @@ spring:
       timeout: 3000ms
       repositories:
         enabled: true
-  cache:
-    type: redis
 
 # SpringDoc config
 springdoc:
@@ -64,11 +62,12 @@ management:
     env:
       access: none
     prometheus:
-      enabled: true
+      access: read_only
     info:
-      enabled: true
+      access: none
     configprops:
       access: none
+
   endpoints:
     web:
       exposure:
@@ -86,6 +85,7 @@ management:
           - info
           - configprops
         exclude: shutdown   # shutdown xavfli, odatda yopiladi
+
   metrics:
     tags:
       application: ${spring.application.name}   # Prometheus/Grafana uchun app tag qo‘shish
