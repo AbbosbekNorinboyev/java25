@@ -19,7 +19,7 @@ import uz.brb.java25.util.JWTUtil;
  */
 @Component
 @RequiredArgsConstructor
-public class JWTFilter extends OncePerRequestFilter {
+public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
 
