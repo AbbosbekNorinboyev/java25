@@ -17,7 +17,7 @@ public class Util {
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString = null;
         try {
-            objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+            jsonString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new JsonConversionException("Failed to convert object to JSON", e);
         }

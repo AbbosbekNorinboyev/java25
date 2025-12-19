@@ -1,6 +1,5 @@
 package uz.brb.java25.config;
 
-import module java.base;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import uz.brb.java25.util.JWTUtil;
+
+import java.io.IOException;
 
 /**
  * JWT tokenni har bir so‘rovda tekshirish uchun filter

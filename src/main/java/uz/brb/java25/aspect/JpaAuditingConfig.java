@@ -1,6 +1,5 @@
 package uz.brb.java25.aspect;
 
-import module java.base;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
