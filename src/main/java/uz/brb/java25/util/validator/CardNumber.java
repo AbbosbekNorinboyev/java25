@@ -1,8 +1,9 @@
 package uz.brb.java25.util.validator;
 
-import module java.base;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+
+import java.lang.annotation.*;
 
 @Documented
 @Constraint(validatedBy = CardNumberValidator.class)

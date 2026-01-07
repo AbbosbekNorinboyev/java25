@@ -1,7 +1,8 @@
 package uz.brb.java25.util.validator;
 
-import module java.base;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+import java.lang.annotation.*;
 
 @Target({ElementType.PARAMETER, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)

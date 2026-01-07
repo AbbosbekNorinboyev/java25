@@ -1,6 +1,5 @@
 package uz.brb.java25.util.validator;
 
-import module java.base;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
