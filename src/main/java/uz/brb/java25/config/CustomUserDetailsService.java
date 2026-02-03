@@ -1,6 +1,8 @@
 package uz.brb.java25.config;
 
+import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,8 +15,9 @@ import uz.brb.java25.repository.AuthUserRepository;
 public class CustomUserDetailsService implements UserDetailsService {
     private final AuthUserRepository authUserRepository;
 
+    @Nonnull
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         return authUserRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("Username not found by username: " + username));
     }

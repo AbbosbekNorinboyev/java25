@@ -1,5 +1,6 @@
 package uz.brb.java25.entity;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -31,6 +32,7 @@ public class AuthUser extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Nonnull
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
@@ -41,6 +43,7 @@ public class AuthUser extends BaseEntity implements UserDetails {
         return password;
     }
 
+    @Nonnull
     @Override
     public String getUsername() {
         return username;
