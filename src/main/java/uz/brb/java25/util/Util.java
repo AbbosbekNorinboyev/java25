@@ -7,8 +7,8 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import lombok.extern.slf4j.Slf4j;
-import uz.brb.java25.exceptiom.InvalidHeadersException;
-import uz.brb.java25.exceptiom.JsonConversionException;
+import uz.brb.java25.exception.InvalidHeadersException;
+import uz.brb.java25.exception.JsonConversionException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

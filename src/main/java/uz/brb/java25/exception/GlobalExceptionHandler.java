@@ -1,4 +1,4 @@
-package uz.brb.java25.exceptiom;
+package uz.brb.java25.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;

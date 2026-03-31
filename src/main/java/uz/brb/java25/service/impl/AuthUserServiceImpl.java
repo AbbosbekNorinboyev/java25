@@ -12,7 +12,7 @@ import uz.brb.java25.dto.request.RegisterRequest;
 import uz.brb.java25.dto.response.Response;
 import uz.brb.java25.entity.AuthUser;
 import uz.brb.java25.enums.Role;
-import uz.brb.java25.exceptiom.ResourceNotFoundException;
+import uz.brb.java25.exception.ResourceNotFoundException;
 import uz.brb.java25.repository.AuthUserRepository;
 import uz.brb.java25.service.AuthUserService;
 import uz.brb.java25.util.JWTUtil;

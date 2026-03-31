@@ -1,4 +1,4 @@
-package uz.brb.java25.exceptiom;
+package uz.brb.java25.exception;
 
 public class InvalidHeadersException extends RuntimeException {
     public InvalidHeadersException(String message) {
