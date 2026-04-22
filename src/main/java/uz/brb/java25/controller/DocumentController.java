@@ -18,7 +18,7 @@ public class DocumentController {
     }
 
     @GetMapping("/getAll")
-    public Response<?> getAll() {
-        return documentService.getAll();
+    public Response<?> getAll(@RequestParam(name = "search", required = false) String search) {
+        return documentService.getAll(search);
     }
 }

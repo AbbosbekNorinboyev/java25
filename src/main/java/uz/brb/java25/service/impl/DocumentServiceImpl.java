@@ -1,5 +1,6 @@
 package uz.brb.java25.service.impl;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,9 @@ import uz.brb.java25.repository.DocumentRepository;
 import uz.brb.java25.service.DocumentService;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static uz.brb.java25.util.Util.localDateTimeFormatter;
 
@@ -18,6 +21,7 @@ import static uz.brb.java25.util.Util.localDateTimeFormatter;
 @RequiredArgsConstructor
 public class DocumentServiceImpl implements DocumentService {
     private final DocumentRepository documentRepository;
+    EntityManager entityManager;
 
     @Override
     public Response<?> create(DocumentRequest request) {
@@ -37,8 +41,21 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Response<?> getAll() {
-        List<Document> documents = documentRepository.findAll();
+    @SuppressWarnings("unchecked")
+    public Response<?> getAll(String search) {
+        if (search == null || search.trim().isEmpty()) {
+            return Response.builder()
+                    .code(HttpStatus.OK.value())
+                    .status(HttpStatus.OK)
+                    .success(true)
+                    .message("Document is empty")
+                    .data(Collections.emptyList())
+                    .timestamp(localDateTimeFormatter(LocalDateTime.now()))
+                    .build();
+        }
+        List<Objects[]> documents = entityManager.createQuery(
+                        "SELECT d FROM Document d")
+                .getResultList();
         return Response.builder()
                 .code(HttpStatus.OK.value())
                 .status(HttpStatus.OK)
