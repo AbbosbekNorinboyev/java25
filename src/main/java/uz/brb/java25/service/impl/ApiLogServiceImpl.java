@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.brb.java25.dto.response.Response;
 import uz.brb.java25.entity.ApiLog;
 import uz.brb.java25.repository.ApiLogRepository;
@@ -39,6 +40,7 @@ public class ApiLogServiceImpl implements ApiLogService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Response<?> getAll(Pageable pageable) {
         Page<ApiLog> apiLogs = apiLogRepository.findAll(pageable);
         return Response.builder()

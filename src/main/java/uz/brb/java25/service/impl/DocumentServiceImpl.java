@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.brb.java25.dto.request.DocumentRequest;
 import uz.brb.java25.dto.response.Response;
 import uz.brb.java25.entity.Document;
@@ -21,7 +22,7 @@ import static uz.brb.java25.util.Util.localDateTimeFormatter;
 @RequiredArgsConstructor
 public class DocumentServiceImpl implements DocumentService {
     private final DocumentRepository documentRepository;
-    EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @Override
     public Response<?> create(DocumentRequest request) {
@@ -42,6 +43,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     @SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
     public Response<?> getAll(String search) {
         if (search == null || search.trim().isEmpty()) {
             return Response.builder()
@@ -54,7 +56,9 @@ public class DocumentServiceImpl implements DocumentService {
                     .build();
         }
         List<Objects[]> documents = entityManager.createQuery(
-                        "SELECT d FROM Document d")
+                        "SELECT d FROM Document d" +
+                                " WHERE d.url LIKE :search")
+                .setParameter("search", "%" + search + "%")
                 .getResultList();
         return Response.builder()
                 .code(HttpStatus.OK.value())
