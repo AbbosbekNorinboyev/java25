@@ -1,6 +1,7 @@
 package uz.brb.java25.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import uz.brb.java25.dto.request.DocumentRequest;
 import uz.brb.java25.dto.response.Response;
@@ -18,7 +19,9 @@ public class DocumentController {
     }
 
     @GetMapping("/getAll")
-    public Response<?> getAll(@RequestParam(name = "search", required = false) String search) {
-        return documentService.getAll(search);
+    public Response<?> getAll(@RequestParam(name = "search", required = false) String search,
+                              @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                              @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+        return documentService.getAll(search, PageRequest.of(page, size));
     }
 }

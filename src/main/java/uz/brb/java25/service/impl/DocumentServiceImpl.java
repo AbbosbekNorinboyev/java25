@@ -2,6 +2,7 @@ package uz.brb.java25.service.impl;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +45,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
-    public Response<?> getAll(String search) {
+    public Response<?> getAll(String search, Pageable pageable) {
         if (search == null || search.trim().isEmpty()) {
             return Response.builder()
                     .code(HttpStatus.OK.value())
@@ -59,6 +60,8 @@ public class DocumentServiceImpl implements DocumentService {
                         "SELECT d FROM Document d" +
                                 " WHERE d.url LIKE :search")
                 .setParameter("search", "%" + search + "%")
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
                 .getResultList();
         return Response.builder()
                 .code(HttpStatus.OK.value())
