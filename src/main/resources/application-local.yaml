@@ -30,6 +30,19 @@ spring:
       repositories:
         enabled: true
 
+  rabbitmq:
+    username: guest
+    password: guest
+    port: 5672
+    listener:
+      simple:
+        retry:
+          enabled: true
+          initial-interval: 5s
+          max-attempts: 5
+          max-interval: 10s
+          multiplier: 2
+
 # SpringDoc config
 springdoc:
   api-docs:
