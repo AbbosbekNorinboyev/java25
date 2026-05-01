@@ -102,20 +102,6 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-    // 404 - Resource topilmadi
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public Response<?> handleResourceNotFoundException(ResourceNotFoundException ex,
-                                                       HttpServletRequest req) {
-        return Response.builder()
-                .code(HttpStatus.NOT_FOUND.value())  // Not found request kodi
-                .status(HttpStatus.NOT_FOUND)
-                .message(ex.getMessage())
-                .success(false)
-                .timestamp(localDateTimeFormatter(LocalDateTime.now()))
-                .path(req.getRequestURI())
-                .build();
-    }
-
     // 405 - Noto'g'ri HTTP metod
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Response<?> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex,

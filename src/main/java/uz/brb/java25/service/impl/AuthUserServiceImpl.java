@@ -12,7 +12,7 @@ import uz.brb.java25.dto.request.RegisterRequest;
 import uz.brb.java25.dto.response.Response;
 import uz.brb.java25.entity.AuthUser;
 import uz.brb.java25.enums.Role;
-import uz.brb.java25.exception.ResourceNotFoundException;
+import uz.brb.java25.exception.CustomException;
 import uz.brb.java25.repository.AuthUserRepository;
 import uz.brb.java25.service.AuthUserService;
 import uz.brb.java25.util.JWTUtil;
@@ -62,16 +62,7 @@ public class AuthUserServiceImpl implements AuthUserService {
     @Override
     public Response<?> login(LoginRequest loginRequest) {
         AuthUser authUser = authUserRepository.findByUsername(loginRequest.getUsername())
-                .orElseThrow(() -> new ResourceNotFoundException("AuthUser not found by username: " + loginRequest.getUsername()));
-        if (authUser.getUsername() == null) {
-            return Response.builder()
-                    .code(HttpStatus.NOT_FOUND.value())
-                    .status(HttpStatus.NOT_FOUND)
-                    .success(false)
-                    .message("Username not found")
-                    .timestamp(localDateTimeFormatter(LocalDateTime.now()))
-                    .build();
-        }
+                .orElseThrow(() -> CustomException.notFound("AuthUser not found by username: " + loginRequest.getUsername()));
         if (!validatePassword(loginRequest.getPassword(), authUser.getPassword())) {
             return Response.builder()
                     .code(HttpStatus.BAD_REQUEST.value())
