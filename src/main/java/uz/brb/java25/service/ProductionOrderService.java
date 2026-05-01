@@ -26,8 +26,7 @@ public class ProductionOrderService {
 
     @Transactional(readOnly = true)
     public PageResponse<ProductionOrderResponse> getAll(Pageable pageable) {
-        Page<ProductionOrderResponse> page = repository.findAll(pageable)
-                .map(this::toResponse);
+        Page<ProductionOrderResponse> page = repository.findAll(pageable).map(this::toResponse);
         return PageResponse.from(page);
     }
 
@@ -57,17 +56,17 @@ public class ProductionOrderService {
         return toResponse(repository.save(entity));
     }
 
-    private ProductionOrderResponse toResponse(ProductionOrderEntity e) {
+    private ProductionOrderResponse toResponse(ProductionOrderEntity p) {
         return new ProductionOrderResponse(
-                e.getId(),
-                e.getOrderNumber(),
-                e.getProduct() != null ? e.getProduct().getId() : null,
-                e.getQuantity(),
-                e.getStatus(),
-                e.getPlannedStartDate(),
-                e.getPlannedEndDate(),
-                e.getCreatedAt(),
-                e.getUpdatedAt()
+                p.getId(),
+                p.getOrderNumber(),
+                p.getProduct() != null ? p.getProduct().getId() : null,
+                p.getQuantity(),
+                p.getStatus(),
+                p.getPlannedStartDate(),
+                p.getPlannedEndDate(),
+                p.getCreatedAt(),
+                p.getUpdatedAt()
         );
     }
 }
