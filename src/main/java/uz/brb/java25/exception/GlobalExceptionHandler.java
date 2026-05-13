@@ -2,6 +2,7 @@ package uz.brb.java25.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import org.apache.coyote.BadRequestException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -71,6 +72,19 @@ public class GlobalExceptionHandler {
                 .success(false)
                 .timestamp(localDateTimeFormatter(LocalDateTime.now()))
                 .path(req.getRequestURI())
+                .build();
+    }
+
+    // 400
+    @ExceptionHandler(BadRequestException.class)
+    public Response<?> handleBadRequestFoundException(BadRequestException ex, HttpServletRequest rqe) {
+        return Response.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .status(HttpStatus.BAD_REQUEST)
+                .message(ex.getMessage())
+                .success(false)
+                .timestamp(localDateTimeFormatter(LocalDateTime.now()))
+                .path(rqe.getRequestURI())
                 .build();
     }
 
