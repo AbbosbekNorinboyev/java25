@@ -1,11 +1,13 @@
 package uz.brb.java25.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import uz.brb.java25.dto.response.Response;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -139,6 +142,42 @@ public class GlobalExceptionHandler {
                 .success(false)
                 .timestamp(localDateTimeFormatter(LocalDateTime.now()))
                 .path(req.getRequestURI())
+                .build();
+    }
+
+    // JSON parsing xatolarini ushlaydi
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public Response<?> handleMessageNotReadable(
+            HttpMessageNotReadableException ex,
+            HttpServletRequest request
+    ) {
+        String message = "Request body is invalid";
+        Throwable cause = ex.getCause();
+        if (cause instanceof InvalidFormatException invalidFormatException) {
+            String fieldName = invalidFormatException.getPath().isEmpty()
+                    ? "unknown"
+                    : invalidFormatException.getPath().get(invalidFormatException.getPath().size() - 1).getFieldName();
+            Object invalidValue = invalidFormatException.getValue();
+            Class<?> targetType = invalidFormatException.getTargetType();
+            if (targetType != null && targetType.isEnum()) {
+                String allowedValues = Arrays.stream(targetType.getEnumConstants())
+                        .map(String::valueOf)
+                        .collect(Collectors.joining(", "));
+                message = "Invalid value '" + invalidValue + "' for field '" + fieldName
+                        + "'. Allowed values: [" + allowedValues + "]";
+            } else {
+                message = "Invalid value '" + invalidValue + "' for field '" + fieldName + "'";
+            }
+        } else if (ex.getMostSpecificCause() != null && ex.getMostSpecificCause().getMessage() != null) {
+            message = ex.getMostSpecificCause().getMessage();
+        }
+        return Response.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message(message)
+                .status(HttpStatus.BAD_REQUEST)
+                .success(false)
+                .timestamp(localDateTimeFormatter(LocalDateTime.now()))
+                .path(request.getRequestURI())
                 .build();
     }
 }
