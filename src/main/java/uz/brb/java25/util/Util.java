@@ -7,8 +7,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import lombok.extern.slf4j.Slf4j;
-import uz.brb.java25.exception.InvalidHeadersException;
-import uz.brb.java25.exception.JsonConversionException;
+import uz.brb.java25.exception.CustomException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,7 +26,7 @@ public class Util {
         try {
             jsonString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            throw new JsonConversionException("Failed to convert object to JSON", e);
+            throw CustomException.jsonConversion("Failed to convert object to JSON", e);
         }
         return jsonString;
     }
@@ -58,7 +57,7 @@ public class Util {
 
             var violations = validator.validate(validate);
             if (!violations.isEmpty()) {
-                throw new InvalidHeadersException(errMessage);
+                throw CustomException.invalidHeaders(errMessage);
             }
         }
     }

@@ -76,32 +76,6 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-    // 400
-    @ExceptionHandler(BadRequestException.class)
-    public Response<?> handleBadRequestFoundException(BadRequestException ex, HttpServletRequest rqe) {
-        return Response.builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .status(HttpStatus.BAD_REQUEST)
-                .message(ex.getMessage())
-                .success(false)
-                .timestamp(localDateTimeFormatter(LocalDateTime.now()))
-                .path(rqe.getRequestURI())
-                .build();
-    }
-
-    // 400
-    @ExceptionHandler(InvalidHeadersException.class)
-    public Response<?> handleInvalidHeaders(InvalidHeadersException ex, WebRequest req) {
-        return Response.builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .status(HttpStatus.BAD_REQUEST)
-                .message(ex.getMessage())
-                .success(false)
-                .timestamp(LocalDateTime.now().toString())
-                .path(((ServletWebRequest) req).getRequest().getRequestURI())
-                .build();
-    }
-
     // 405 - Noto'g'ri HTTP metod
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Response<?> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex,
@@ -137,18 +111,6 @@ public class GlobalExceptionHandler {
                 .code(HttpStatus.INTERNAL_SERVER_ERROR.value())   // Internal Server Error request kodi
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .message("Something wrong -> " + ex.getMessage())
-                .success(false)
-                .timestamp(localDateTimeFormatter(LocalDateTime.now()))
-                .path(req.getRequestURI())
-                .build();
-    }
-
-    @ExceptionHandler(JsonConversionException.class)
-    public Response<?> handleJsonConversionException(JsonConversionException ex, HttpServletRequest req) {
-        return Response.builder()
-                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .message("JSON conversion error: " + ex.getMessage())
                 .success(false)
                 .timestamp(localDateTimeFormatter(LocalDateTime.now()))
                 .path(req.getRequestURI())
