@@ -40,4 +40,16 @@ public class CustomException extends RuntimeException {
     public static CustomException invalidHeaders(String message, Throwable cause) {
         return new CustomException(message, cause, HttpStatus.BAD_REQUEST);
     }
+
+    public static CustomException conflict(String message) {
+        return new CustomException(message, HttpStatus.CONFLICT);
+    }
+
+    public static CustomException forbidden(String message) {
+        return new CustomException(message, HttpStatus.FORBIDDEN);
+    }
+
+    public static CustomException unauthorized(String message) {
+        return new CustomException(message, HttpStatus.UNAUTHORIZED);
+    }
 }
