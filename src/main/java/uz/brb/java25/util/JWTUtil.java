@@ -3,13 +3,14 @@ package uz.brb.java25.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import uz.brb.java25.config.CustomUserDetailsService;
 
-import java.util.Base64;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,8 +23,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JWTUtil {
     private final CustomUserDetailsService userDetailsService;
-    private final String KEY = "secretaesrdtfghjkllkjhugyufdrxfgvqwertyuiiiiopasdfghjklzxcvbnm";
-    private final String SECRET_KEY = Base64.getEncoder().encodeToString(KEY.getBytes());
+    private final JwtProperties jwtProperties;
+//    private final String KEY = "secretaesrdtfghjkllkjhugyufdrxfgvqwertyuiiiiopasdfghjklzxcvbnm";
+//    private final String SECRET_KEY = Base64.getEncoder().encodeToString(KEY.getBytes());
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
@@ -42,8 +44,8 @@ public class JWTUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10 * 24)) // 10 kun
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.accessTokenExpirationMs())) // 10 kun
+                .signWith(getSignKey())
                 .compact();
     }
 
@@ -62,10 +64,16 @@ public class JWTUtil {
 
     public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(getSignKey())
                 .setAllowedClockSkewSeconds(35)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    private Key getSignKey() {
+        return Keys.hmacShaKeyFor(
+                jwtProperties.secret().getBytes()
+        );
     }
 }

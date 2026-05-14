@@ -117,3 +117,9 @@ sentry:
   dsn: https://7588209a70b63bf54617908b30a490a0@o4510895299690496.ingest.us.sentry.io/4510895332917248
   environment: local
   traces-sample-rate: 1.0
+
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:change-this-secret-in-production-must-be-at-least-256-bits-long-for-hs256}
+      access-token-expiration-ms: ${JWT_ACCESS_EXPIRATION_MS:864000000}
