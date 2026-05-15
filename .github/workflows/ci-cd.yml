@@ -3,8 +3,14 @@ name: CI/CD
 on:
   push:
     branches:
-     - abbos
-     - master
+      - abbos
+      - master
+  pull_request:
+    branches: [ master ]
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   build:
