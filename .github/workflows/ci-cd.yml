@@ -2,9 +2,14 @@ name: CI/CD
 
 on:
   push:
-    branches: [ abbos, master ]
+    branches:
+     - abbos
+     - master
+
   pull_request:
-    branches: [ abbos, master ]
+    branches:
+    - abbos
+    - master
   workflow_dispatch:
 
 jobs:
@@ -15,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v3
         with:
           java-version: '25'
           distribution: 'temurin'
