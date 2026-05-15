@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 public class JWTUtil {
     private final CustomUserDetailsService userDetailsService;
     private final JwtProperties jwtProperties;
-//    private final String SECRET_KEY = Base64.getEncoder().encodeToString(KEY.getBytes());
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
