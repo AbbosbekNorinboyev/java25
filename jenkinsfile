@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "spring-boot-jenkinstest"
+        CONTAINER_NAME = "jenkinsfile-example"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    echo 'Kod repodan yuklanmoqda...'
+                    checkout scm
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    echo 'Maven orqali loyihani build qilinmoqda...'
+                    sh 'mvn clean package -DskipTests'
+                }
+            }
+        }
+
+        stage('Docker build') {
+            steps {
+                script {
+                    echo 'Docker image yaratilmoqda...'
+                    sh "docker build -t ${IMAGE_NAME} ."
+                }
+            }
+        }
+
+        stage('Deploy with Docker Compose') {
+            steps {
+                script {
+                    echo 'Docker Compose orqali ilova ishga tushirilmoqda...'
+                    sh """
+                        docker-compose down
+                        docker-compose up -d --build
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment muvaffaqiyatli yakunlandi'
+        }
+        failure {
+            echo 'Deploymentda xatolik yuz berdi'
+        }
+    }
+}
