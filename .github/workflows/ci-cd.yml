@@ -12,6 +12,11 @@ permissions:
   contents: read
   packages: write
 
+env:
+  REPO_NAME: https://github.com/AbbosbekNorinboyev/java25
+  REGISTRY: ghcr.io
+  IMAGE_NAME: java25
+
 jobs:
   build:
     runs-on: ubuntu-latest
