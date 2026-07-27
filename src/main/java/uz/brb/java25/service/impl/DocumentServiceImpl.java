@@ -9,11 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.brb.java25.dto.request.DocumentRequest;
 import uz.brb.java25.dto.response.Response;
 import uz.brb.java25.entity.Document;
+import uz.brb.java25.exception.CustomException;
 import uz.brb.java25.repository.DocumentRepository;
 import uz.brb.java25.service.DocumentService;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,14 +47,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Transactional(readOnly = true)
     public Response<?> getAll(String search, Pageable pageable) {
         if (search == null || search.trim().isEmpty()) {
-            return Response.builder()
-                    .code(HttpStatus.OK.value())
-                    .status(HttpStatus.OK)
-                    .success(true)
-                    .message("Document is empty")
-                    .data(Collections.emptyList())
-                    .timestamp(localDateTimeFormatter(LocalDateTime.now()))
-                    .build();
+            throw CustomException.badRequest("Search parameter cannot be empty");
         }
         List<Objects[]> documents = entityManager.createQuery(
                         "SELECT d FROM Document d" +
