@@ -36,13 +36,7 @@ public class AuthUserServiceImpl implements AuthUserService {
     public Response<?> register(RegisterRequest registerRequest) {
         Optional<AuthUser> byUsername = authUserRepository.findByUsername(registerRequest.getUsername());
         if (byUsername.isPresent()) {
-            return Response.builder()
-                    .code(HttpStatus.BAD_REQUEST.value())
-                    .status(HttpStatus.BAD_REQUEST)
-                    .success(false)
-                    .message("Username already exists")
-                    .timestamp(localDateTimeFormatter(LocalDateTime.now()))
-                    .build();
+            throw CustomException.badRequest("Username already exists");
         }
         AuthUser authUser = new AuthUser();
         authUser.setFullName(registerRequest.getFullName());
@@ -64,13 +58,7 @@ public class AuthUserServiceImpl implements AuthUserService {
         AuthUser authUser = authUserRepository.findByUsername(loginRequest.getUsername())
                 .orElseThrow(() -> CustomException.notFound("AuthUser not found by username: " + loginRequest.getUsername()));
         if (!validatePassword(loginRequest.getPassword(), authUser.getPassword())) {
-            return Response.builder()
-                    .code(HttpStatus.BAD_REQUEST.value())
-                    .status(HttpStatus.BAD_REQUEST)
-                    .success(false)
-                    .message("Invalid password")
-                    .timestamp(localDateTimeFormatter(LocalDateTime.now()))
-                    .build();
+            throw CustomException.badRequest("Invalid password");
         }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
