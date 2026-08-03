@@ -58,7 +58,7 @@ jobs:
           cache: maven
 
       - name: Build and test
-        run: ./mvnw -B clean verify
+        run: bash ./mvnw -B clean verify
 
       - name: Upload application artifact
         uses: actions/upload-artifact@v4
