@@ -138,6 +138,6 @@ public class Util {
     }
 
     public static int strlen(String string) {
-        return string.length();
+        return string == null ? 0 : string.length();
     }
 }
