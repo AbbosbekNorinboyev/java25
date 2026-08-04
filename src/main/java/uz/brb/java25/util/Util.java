@@ -136,4 +136,8 @@ public class Util {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return utcPlus5DateTime.format(formatter);
     }
+
+    public static int strlen(String string) {
+        return string.length();
+    }
 }
