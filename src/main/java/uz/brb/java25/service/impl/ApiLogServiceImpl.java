@@ -21,13 +21,16 @@ public class ApiLogServiceImpl implements ApiLogService {
     private final ApiLogRepository apiLogRepository;
 
     @Override
-    public Response<?> saveLog(String username, String method, String path, LocalDateTime time, long duration) {
+    public Response<?> saveLog(String username, String method, String path, LocalDateTime time, long duration,
+                               boolean success, String errorMessage) {
         ApiLog apiLog = ApiLog.builder()
                 .username(username)
                 .method(method)
                 .path(path)
                 .timestamp(time)
                 .durationMs(duration)
+                .success(success)
+                .errorMessage(errorMessage)
                 .build();
         apiLogRepository.save(apiLog);
         return Response.builder()
@@ -48,6 +51,20 @@ public class ApiLogServiceImpl implements ApiLogService {
                 .status(HttpStatus.OK)
                 .success(true)
                 .message("ApiLog list successfully found")
+                .data(apiLogs)
+                .timestamp(localDateTimeFormatter(LocalDateTime.now()))
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Response<?> getAllErrors(Pageable pageable) {
+        Page<ApiLog> apiLogs = apiLogRepository.findAllBySuccessFalse(pageable);
+        return Response.builder()
+                .code(HttpStatus.OK.value())
+                .status(HttpStatus.OK)
+                .success(true)
+                .message("ApiLog error list successfully found")
                 .data(apiLogs)
                 .timestamp(localDateTimeFormatter(LocalDateTime.now()))
                 .build();

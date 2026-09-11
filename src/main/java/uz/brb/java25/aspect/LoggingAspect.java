@@ -48,10 +48,16 @@ public class LoggingAspect {
         String path = request.getRequestURI();
 
         // Method bajarilishi
-        Object proceed = joinPoint.proceed();
-
-        long duration = System.currentTimeMillis() - start;
-        apiLogService.saveLog(username, methodName, path, LocalDateTime.now(), duration);
-        return proceed;
+        try {
+            Object proceed = joinPoint.proceed();
+            long duration = System.currentTimeMillis() - start;
+            apiLogService.saveLog(username, methodName, path, LocalDateTime.now(), duration, true, null);
+            return proceed;
+        } catch (Throwable ex) {
+            long duration = System.currentTimeMillis() - start;
+            apiLogService.saveLog(username, methodName, path, LocalDateTime.now(), duration, false, ex.getMessage());
+            // Xatolikni yutib qolmaymiz - GlobalExceptionHandler o'zi to'g'ri javob qaytarishi uchun qayta uloqtiramiz
+            throw ex;
+        }
     }
 }
