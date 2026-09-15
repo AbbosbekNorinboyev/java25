@@ -25,4 +25,10 @@ public class ApiLog {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SS")
     private LocalDateTime timestamp;
     private Long durationMs;
+
+    @Builder.Default
+    private Boolean success = true;
+
+    @Column(columnDefinition = "TEXT")
+    private String errorMessage;
 }

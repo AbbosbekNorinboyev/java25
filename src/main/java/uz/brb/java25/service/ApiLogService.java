@@ -6,7 +6,10 @@ import uz.brb.java25.dto.response.Response;
 import java.time.LocalDateTime;
 
 public interface ApiLogService {
-    Response<?> saveLog(String username, String method, String path, LocalDateTime time, long duration);
+    Response<?> saveLog(String username, String method, String path, LocalDateTime time, long duration,
+                        boolean success, String errorMessage);
 
     Response<?> getAll(Pageable pageable);
+
+    Response<?> getAllErrors(Pageable pageable);
 }

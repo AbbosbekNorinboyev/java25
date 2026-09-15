@@ -20,4 +20,10 @@ public class ApiLogController {
                               @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
         return apiLogService.getAll(PageRequest.of(page, size));
     }
+
+    @GetMapping("/getErrors")
+    public Response<?> getErrors(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                 @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+        return apiLogService.getAllErrors(PageRequest.of(page, size));
+    }
 }
